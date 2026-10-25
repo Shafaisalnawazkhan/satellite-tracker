@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="60" height="60">
+  <defs>
+    <linearGradient id="panelGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00d2ff"/>
+      <stop offset="100%" stop-color="#0066ff"/>
+    </linearGradient>
+    <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#94a3b8"/>
+    </linearGradient>
+  </defs>
+  <!-- Left Solar Array -->
+  <rect x="5" y="42" width="28" height="16" rx="2" fill="url(#panelGrad)" stroke="#38bdf8" stroke-width="1.5"/>
+  <line x1="14" y1="42" x2="14" y2="58" stroke="#0284c7" stroke-width="1"/>
+  <line x1="23" y1="42" x2="23" y2="58" stroke="#0284c7" stroke-width="1"/>
+  <line x1="5" y1="50" x2="33" y2="50" stroke="#0284c7" stroke-width="1"/>
+  
+  <!-- Left Truss -->
+  <line x1="33" y1="50" x2="42" y2="50" stroke="#94a3b8" stroke-width="3"/>
+
+  <!-- Core Module (Tianhe) -->
+  <rect x="42" y="38" width="16" height="24" rx="4" fill="url(#bodyGrad)" stroke="#64748b" stroke-width="1.5"/>
+  <!-- Node / Docking Hub -->
+  <circle cx="50" cy="50" r="5" fill="#f8fafc" stroke="#475569" stroke-width="1.5"/>
+  <!-- Vertical Lab Modules (Wentian / Mengtian) -->
+  <rect x="44" y="24" width="12" height="14" rx="2" fill="url(#bodyGrad)" stroke="#64748b" stroke-width="1.2"/>
+  <rect x="44" y="62" width="12" height="14" rx="2" fill="url(#bodyGrad)" stroke="#64748b" stroke-width="1.2"/>
+
+  <!-- Right Truss -->
+  <line x1="58" y1="50" x2="67" y2="50" stroke="#94a3b8" stroke-width="3"/>
+
+  <!-- Right Solar Array -->
+  <rect x="67" y="42" width="28" height="16" rx="2" fill="url(#panelGrad)" stroke="#38bdf8" stroke-width="1.5"/>
+  <line x1="76" y1="42" x2="76" y2="58" stroke="#0284c7" stroke-width="1"/>
+  <line x1="85" y1="42" x2="85" y2="58" stroke="#0284c7" stroke-width="1"/>
+  <line x1="67" y1="50" x2="95" y2="50" stroke="#0284c7" stroke-width="1"/>
+
+  <!-- Communication Dish -->
+  <circle cx="50" cy="18" r="4" fill="#38bdf8" opacity="0.8"/>
+  <line x1="50" y1="22" x2="50" y2="24" stroke="#64748b" stroke-width="1.5"/>
+</svg>

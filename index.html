@@ -3,25 +3,258 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Real-Time Multi-Satellite Tracker | [1A] ISS, [1B] Tiangong, [1C] Cartosat-3 (ISRO 🇮🇳)</title>
+    <!-- Favicon & Icons -->
+    <link rel="icon" type="image/svg+xml" href="icon/favicon.svg">
+    <link rel="apple-touch-icon" href="icon/orbit_logo.svg">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-     crossorigin=""/>
-     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-     crossorigin=""></script>
-     <link rel="stylesheet" href="style.css">
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
+    <link rel="stylesheet" href="style.css">
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+    <!-- Satellite.js for real-time orbital calculations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/satellite.js/5.0.0/satellite.min.js"></script>
 </head>
 
 <body>
-    <h1>where is ISS?</h1>
-    <div  class="coordinates">
-      <div class="coordinate">logitude: <div id="logitude"></div></div>
-      <div class="coordinate" >letitude: <div id="latitude"></div></div>
-    </div>
-    
-    <div id="ISS_map"></div>
-</body>[
-<script src="main.js"></script>
+    <div class="dashboard-wrapper">
+        <!-- Main Top Bar -->
+        <header class="hub-header">
+            <div class="header-brand">
+                <div class="brand-logo-container">
+                    <img src="icon/orbit_logo.svg" alt="AstroTrack Logo" class="brand-logo-img"/>
+                    <span class="brand-logo-radar"></span>
+                </div>
+                <div class="brand-text">
+                    <div class="brand-title-wrap">
+                        <h1>AstroTrack <span class="brand-badge-pro">ORBIT LIVE</span></h1>
+                        <span class="live-pulse-dot" title="Live Telemetry Stream Active"></span>
+                    </div>
+                    <div class="brand-sub">Real-Time Multi-Satellite Tracker • [1A] ISS • [1B] Tiangong • [1C] Cartosat-3 (ISRO 🇮🇳)</div>
+                </div>
+            </div>
 
+            <!-- Meta info & Theme Toggle -->
+            <div class="header-meta">
+                <button class="btn-theme-toggle" id="btn_theme_toggle" title="Toggle Light/Dark Theme">
+                    <span id="theme_icon">☀️</span> <span id="theme_label">Light Mode</span>
+                </button>
+                <span class="live-tag">● LIVE NORAD TELEMETRY</span>
+                <span id="utc_clock" class="mono">UTC: --:--:--</span>
+            </div>
+        </header>
+
+        <!-- Distance Telemetry Bar -->
+        <div class="distance-bar">
+            <div class="dist-header">
+                <span class="dist-icon">🛰️</span>
+                <span class="dist-title">3D Orbital Separation:</span>
+            </div>
+            <div class="dist-metrics">
+                <div class="dist-pill">
+                    <span class="legend-dot dot-1a"></span>
+                    <span class="dist-lbl">ISS ↔ <strong id="dist_sat2_name">Tiangong</strong>:</span>
+                    <span id="inter_sat_distance" class="dist-val mono">Calculating...</span>
+                </div>
+                <div class="dist-pill dist-pill-green">
+                    <span class="legend-dot dot-1c"></span>
+                    <span class="dist-lbl">ISS ↔ <strong id="dist_sat3_name">Cartosat-3</strong> 🇮🇳:</span>
+                    <span id="dist_sat3_value" class="dist-val mono dist-val-green">Calculating...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Telemetry Cards for 1A, 1B, 1C -->
+        <div class="telemetry-grid">
+            <!-- Satellite 1A: ISS -->
+            <div class="sat-card card-iss">
+                <div class="card-head">
+                    <span class="sat-badge badge-1a">1A</span>
+                    <div class="sat-info">
+                        <div class="sat-name" title="International Space Station">ISS (Space Station)</div>
+                        <div class="sat-sub">NASA • ESA • JAXA • Roscosmos | #25544</div>
+                    </div>
+                    <button class="btn-focus" id="btn_focus_sat1" title="Focus map on ISS">🎯 Focus</button>
+                </div>
+                <div class="metrics-grid">
+                    <div class="metric-box">
+                        <div class="metric-lbl">Latitude</div>
+                        <div class="metric-val mono" id="sat1_lat">--.----°</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-lbl">Longitude</div>
+                        <div class="metric-val mono" id="sat1_lng">--.----°</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-lbl">Altitude</div>
+                        <div class="metric-val mono" id="sat1_alt">--- km</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-lbl">Velocity</div>
+                        <div class="metric-val mono" id="sat1_vel">--,-- km/h</div>
+                    </div>
+                </div>
+                <div class="card-foot">
+                    <span class="status-chip chip-cyan" id="sat1_visibility">☀️ Daylight</span>
+                    <span class="source-tag">Inclination: 51.6°</span>
+                </div>
+            </div>
+
+            <!-- Satellite 1B: Tiangong / Hubble -->
+            <div class="sat-card card-tiangong">
+                <div class="card-head">
+                    <span class="sat-badge badge-1b">1B</span>
+                    <div class="sat-info">
+                        <select id="sat2_selector" class="dropdown-sat" title="Switch Satellite 1B">
+                            <option value="tiangong" selected>Tiangong Space Station</option>
+                            <option value="hubble">Hubble Space Telescope</option>
+                        </select>
+                        <div class="sat-sub" id="sat2_norad_lbl">CNSA (China) | NORAD #48274</div>
+                    </div>
+                    <button class="btn-focus" id="btn_focus_sat2" title="Focus map on Satellite 1B">🎯 Focus</button>
+                </div>
+                <div class="metrics-grid">
+                    <div class="metric-box">
+                        <div class="metric-lbl">Latitude</div>
+                        <div class="metric-val mono" id="sat2_lat">--.----°</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-lbl">Longitude</div>
+                        <div class="metric-val mono" id="sat2_lng">--.----°</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-lbl">Altitude</div>
+                        <div class="metric-val mono" id="sat2_alt">--- km</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-lbl">Velocity</div>
+                        <div class="metric-val mono" id="sat2_vel">--,-- km/h</div>
+                    </div>
+                </div>
+                <div class="card-foot">
+                    <span class="status-chip chip-amber">🛰️ Active LEO</span>
+                    <span class="source-tag" id="sat2_inc_tag">Inclination: 41.5°</span>
+                </div>
+            </div>
+
+            <!-- Satellite 1C: ISRO Cartosat-3 (India) -->
+            <div class="sat-card card-isro">
+                <div class="card-head">
+                    <span class="sat-badge badge-1c">1C</span>
+                    <div class="sat-info">
+                        <select id="sat3_selector" class="dropdown-sat dropdown-isro" title="Switch Indian Satellite">
+                            <option value="cartosat3" selected>Cartosat-3 (ISRO 🇮🇳)</option>
+                            <option value="risat2br1">RISAT-2BR1 (ISRO 🇮🇳)</option>
+                        </select>
+                        <div class="sat-sub" id="sat3_norad_lbl">ISRO (India) | NORAD #44804</div>
+                    </div>
+                    <button class="btn-focus" id="btn_focus_sat3" title="Focus map on Cartosat-3">🎯 Focus</button>
+                </div>
+                <div class="metrics-grid">
+                    <div class="metric-box">
+                        <div class="metric-lbl">Latitude</div>
+                        <div class="metric-val mono" id="sat3_lat">--.----°</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-lbl">Longitude</div>
+                        <div class="metric-val mono" id="sat3_lng">--.----°</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-lbl">Altitude</div>
+                        <div class="metric-val mono" id="sat3_alt">--- km</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-lbl">Velocity</div>
+                        <div class="metric-val mono" id="sat3_vel">--,-- km/h</div>
+                    </div>
+                </div>
+                <div class="card-foot">
+                    <span class="status-chip chip-green">🛰️ Sun-Sync Polar</span>
+                    <span class="source-tag" id="sat3_inc_tag">Inclination: 97.4°</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Map Section -->
+        <div class="map-section">
+            <div class="map-toolbar">
+                <div class="tb-left">
+                    <button class="btn btn-accent" id="btn_fit_both">🛰️ Fit All [1A, 1B, 1C]</button>
+                    <button class="btn btn-ghost" id="btn_track_sat1">Follow ISS</button>
+                    <button class="btn btn-ghost" id="btn_track_sat2">Follow Tiangong</button>
+                    <button class="btn btn-ghost" id="btn_track_sat3">Follow Cartosat-3 🇮🇳</button>
+                    <button class="btn btn-ghost" id="btn_clear_trails">🧹 Clear Trails</button>
+                    <button class="btn btn-live-cam" id="btn_toggle_cam"><span class="cam-live-dot"></span> 🎥 Live Earth Cam</button>
+                </div>
+                <div class="tb-right">
+                    <button class="btn btn-ghost" id="btn_toggle_map_theme">🌌 Switch Map Style</button>
+                </div>
+            </div>
+
+            <div class="map-container-relative">
+                <div id="ISS_map"></div>
+
+                <!-- Floating NASA ISS Live Earth Camera Widget (Draggable) -->
+                <div class="live-cam-widget" id="live_cam_widget">
+                    <div class="cam-header" id="cam_drag_header" title="🖐️ Drag to reposition camera">
+                        <div class="cam-title">
+                            <span class="cam-drag-handle" title="Drag to move">⠿</span>
+                            <span class="cam-live-dot"></span>
+                            <span class="cam-name">Live 4K Earth Cam</span>
+                        </div>
+                        <div class="cam-controls">
+                            <select id="cam_stream_select" class="cam-stream-dropdown" title="Switch Video Feed">
+                                <option value="fO9e9jnhYK8" selected>Sen 4K ISS Cam</option>
+                                <option value="4QJEibrt9B8">ISS Live 24/7</option>
+                                <option value="ROboUHfPUrU">NASA HD Earth</option>
+                            </select>
+                            <a id="btn_cam_popout" href="https://www.youtube.com/watch?v=fO9e9jnhYK8" target="_blank" class="cam-btn" title="Open Stream in New Tab ↗">↗</a>
+                            <button class="cam-btn" id="btn_cam_minimize" title="Minimize / Restore">🗕</button>
+                            <button class="cam-btn" id="btn_cam_close" title="Hide Camera">✕</button>
+                        </div>
+                    </div>
+                    <div class="cam-body" id="cam_body">
+                        <iframe id="nasa_cam_iframe"
+                                src="https://www.youtube.com/embed/fO9e9jnhYK8?autoplay=1&mute=1&playsinline=1"
+                                title="Live 4K video of Earth: 24/7 Livestream from ISS Sen 4K Cameras"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen></iframe>
+                        <div class="cam-footer">
+                            <span class="cam-sub">📡 Live 4K Ultra-HD from Sen ISS External Cameras</span>
+                            <span class="cam-orbit-tag" id="cam_orbit_status">☀️ Daylight Orbit</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="map-legend">
+                <div class="legend-item">
+                    <span class="legend-dot dot-1a"></span>
+                    <span><strong>[1A] ISS:</strong> Cyan Orbit (51.6° Inclination)</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot dot-1b"></span>
+                    <span><strong>[1B] Tiangong / Hubble:</strong> Amber Orbit (41.5° Inclination)</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot dot-1c"></span>
+                    <span><strong>[1C] Cartosat-3 / RISAT (ISRO 🇮🇳):</strong> Emerald Polar Orbit (97.4° Inclination)</span>
+                </div>
+                <div class="legend-item legend-right">
+                    <span>✅ Real NASA & ISRO CelesTrak NORAD Telemetry</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js?v=brand"></script>
+</body>
 </html>

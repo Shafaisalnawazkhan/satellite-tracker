@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="60" height="60">
+  <defs>
+    <linearGradient id="isroPanel" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="100%" stop-color="#0369a1"/>
+    </linearGradient>
+    <linearGradient id="isroGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+  </defs>
+  <!-- Solar Panels Left -->
+  <rect x="4" y="38" width="28" height="24" rx="2" fill="url(#isroPanel)" stroke="#38bdf8" stroke-width="1.5"/>
+  <line x1="13" y1="38" x2="13" y2="62" stroke="#0284c7" stroke-width="1"/>
+  <line x1="22" y1="38" x2="22" y2="62" stroke="#0284c7" stroke-width="1"/>
+  <line x1="4" y1="50" x2="32" y2="50" stroke="#38bdf8" stroke-width="1"/>
+  
+  <!-- Left Boom -->
+  <line x1="32" y1="50" x2="40" y2="50" stroke="#94a3b8" stroke-width="3"/>
+
+  <!-- Satellite Bus / Gold Foil Body -->
+  <rect x="40" y="32" width="20" height="36" rx="3" fill="url(#isroGold)" stroke="#f59e0b" stroke-width="1.5"/>
+  
+  <!-- Indian Tricolor Accent Strip -->
+  <rect x="40" y="44" width="20" height="4" fill="#ff9933"/>
+  <rect x="40" y="48" width="20" height="4" fill="#ffffff"/>
+  <rect x="40" y="52" width="20" height="4" fill="#138808"/>
+  <circle cx="50" cy="50" r="1.5" fill="#000080"/>
+
+  <!-- High-Res Optical Telescope Aperture (Cartosat Camera) -->
+  <ellipse cx="50" cy="68" rx="6" ry="3" fill="#1e293b" stroke="#94a3b8" stroke-width="1.5"/>
+
+  <!-- Right Boom -->
+  <line x1="60" y1="50" x2="68" y2="50" stroke="#94a3b8" stroke-width="3"/>
+
+  <!-- Solar Panels Right -->
+  <rect x="68" y="38" width="28" height="24" rx="2" fill="url(#isroPanel)" stroke="#38bdf8" stroke-width="1.5"/>
+  <line x1="77" y1="38" x2="77" y2="62" stroke="#0284c7" stroke-width="1"/>
+  <line x1="86" y1="38" x2="86" y2="62" stroke="#0284c7" stroke-width="1"/>
+  <line x1="68" y1="50" x2="96" y2="50" stroke="#38bdf8" stroke-width="1"/>
+
+  <!-- Communication Antenna -->
+  <circle cx="50" cy="24" r="5" fill="#e2e8f0" stroke="#64748b" stroke-width="1.5"/>
+  <line x1="50" y1="29" x2="50" y2="32" stroke="#64748b" stroke-width="2"/>
+</svg>
