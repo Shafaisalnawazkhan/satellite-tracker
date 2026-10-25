@@ -1162,15 +1162,248 @@ body.light-theme .leaflet-popup-tip {
   background: rgba(255, 255, 255, 0.98) !important;
 }
 
-@media (max-width: 800px) {
-  .live-cam-widget {
-    position: relative;
-    top: 0;
-    right: 0;
-    bottom: auto;
-    left: auto;
+/* ==========================================
+   📱 ANDROID & iOS MOBILE RESPONSIVENESS
+   ========================================== */
+
+/* Touch & Viewport defaults */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Tablet & Smaller Desktops (<= 992px) */
+@media (max-width: 992px) {
+  .dashboard-wrapper {
+    gap: 14px;
+  }
+  .telemetry-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+}
+
+/* Mobile Devices & Small Tablets (<= 768px) */
+@media (max-width: 768px) {
+  body {
+    padding-top: max(12px, env(safe-area-inset-top));
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+    padding-left: max(10px, env(safe-area-inset-left));
+    padding-right: max(10px, env(safe-area-inset-right));
+  }
+
+  .dashboard-wrapper {
+    gap: 12px;
+  }
+
+  /* Header */
+  .hub-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 12px 14px;
+    gap: 12px;
+  }
+
+  .header-brand {
+    gap: 10px;
     width: 100%;
-    margin-top: 12px;
+  }
+
+  .brand-logo-container {
+    width: 40px;
+    height: 40px;
+  }
+
+  .brand-text h1 {
+    font-size: 1.15rem;
+    gap: 6px;
+  }
+
+  .brand-badge-pro {
+    font-size: 0.6rem;
+    padding: 2px 6px;
+  }
+
+  .brand-sub {
+    font-size: 0.7rem;
+    line-height: 1.3;
+  }
+
+  .header-meta {
+    width: 100%;
+    justify-content: space-between;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .btn-theme-toggle {
+    font-size: 0.74rem;
+    padding: 4px 10px;
+  }
+
+  .live-tag {
+    font-size: 0.68rem;
+    padding: 3px 8px;
+  }
+
+  #utc_clock {
+    font-size: 0.74rem;
+  }
+
+  /* Distance Bar */
+  .distance-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 10px 12px;
+  }
+
+  .dist-header {
+    font-size: 0.76rem;
+  }
+
+  .dist-metrics {
+    flex-direction: column;
+    width: 100%;
+    gap: 6px;
+  }
+
+  .dist-pill {
+    width: 100%;
+    justify-content: space-between;
+    padding: 7px 12px;
+    font-size: 0.8rem;
+  }
+
+  .dist-val {
+    font-size: 0.98rem;
+  }
+
+  /* Telemetry Cards */
+  .telemetry-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .sat-card {
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .sat-name {
+    font-size: 0.92rem;
+  }
+
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+
+  .metric-box {
+    padding: 7px 10px;
+  }
+
+  .metric-lbl {
+    font-size: 0.68rem;
+  }
+
+  .metric-val {
+    font-size: 1.05rem;
+  }
+
+  /* Map Toolbar */
+  .map-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .tb-left {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    width: 100%;
+  }
+
+  .tb-right {
+    width: 100%;
+  }
+
+  .tb-right .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .btn {
+    font-size: 0.74rem;
+    padding: 6px 10px;
+    flex-grow: 1;
+    justify-content: center;
+  }
+
+  /* Map Container */
+  #ISS_map {
+    height: 380px;
+    border-radius: 12px;
+  }
+
+  /* Map Legend */
+  .map-legend {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    font-size: 0.74rem;
+    padding: 10px 12px;
+  }
+
+  .legend-right {
+    margin-left: 0;
+    width: 100%;
+    font-size: 0.72rem;
+  }
+
+  /* Draggable Camera Widget on Mobile */
+  .live-cam-widget {
+    position: fixed;
+    bottom: max(12px, env(safe-area-inset-bottom));
+    left: 10px;
+    right: 10px;
+    width: auto;
+    max-width: calc(100vw - 20px);
+    border-radius: 12px;
+    z-index: 9999;
+  }
+
+  .live-cam-widget.minimized {
+    width: auto !important;
+    max-width: 240px;
+    left: auto;
+    right: 10px;
+    bottom: max(12px, env(safe-area-inset-bottom));
+  }
+
+  .cam-body iframe {
+    height: 195px;
+  }
+}
+
+/* Extra Small Phones (<= 380px) */
+@media (max-width: 380px) {
+  .brand-text h1 {
+    font-size: 1.02rem;
+  }
+  .btn {
+    font-size: 0.7rem;
+    padding: 5px 8px;
+  }
+  #ISS_map {
+    height: 320px;
   }
 }
 
